@@ -5,7 +5,7 @@ import pytube as pt
 import os
 import shutil
 
-token = "5799520080:AAEoTbfH987-lrIBG0yO45S--wLnWDXjcdU"
+token = ""
 
 bot = Bot(token=token)
 dp = Dispatcher(bot)
