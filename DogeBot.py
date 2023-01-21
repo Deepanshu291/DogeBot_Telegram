@@ -5,7 +5,6 @@ from aiogram.types import *
 import pytube as pt
 import os
 import shutil
-from io import BytesIO
 
 token = "5799520080:AAEoTbfH987-lrIBG0yO45S--wLnWDXjcdU"
 
@@ -22,7 +21,7 @@ class Ytube:
         vid = ytube.streams.get_highest_resolution().download(output_path="./data", filename="video.mp4")
         aud = ytube.streams.get_audio_only().download(output_path="./data", filename="song.mp4")
     def title(self):
-        ytube = pt.YouTube(url=self.url)
+        ytube = pt.YouTube(url=self.url) 
         return ytube.title
     def thumnail(self):
         ytube = pt.YouTube(url=self.url)
@@ -32,31 +31,13 @@ class Ytube:
             shutil.rmtree("data")
         else:    
             os.makedirs(name="data")
-    def AIbot(self, msg):
-        # print(msg)
-        url = f"https://v6.rsa-api.xyz/ai/response?user_id=420&message={msg}"
-         # querystring = {f"message": "{msg}"}
-        headers = {
-             'Authorization': 'Qgy5DMPfjnYX'
-           }
-        response = requests.request("GET", url, headers=headers,)
-        r = response.text
-        r = r.split('"message":"')
-        r = r[1]
-        r = r.split('","warning')
-        r = r[0]
-        r = r.replace('"}', '')
-        # print(r)
-        return r
-        
-        
 
 p= Ytube()
 p.fileh()
 bt1 = InlineKeyboardButton(text="Download Audio", callback_data="audDown")
 bt2 = InlineKeyboardButton(text="Download Video", callback_data="vidDown")
 
-kb1 = ReplyKeyboardMarkup(resize_keyboard=True).add("😉😝MEMES").add("🔢Whatsapp link to Instant Chat").add("📽️Youtube Video Download").add("🌆Image Enchancement","▶️Start AI Chat")
+kb1 = ReplyKeyboardMarkup(resize_keyboard=True).add("😉😝MEMES","▶️Start AI Chat").add("🔢Whatsapp link to Instant Chat").add("📽️Youtube Video Download")
 kb2 = ReplyKeyboardMarkup(resize_keyboard=True).add("⏹️Stop AI Chat")
 lb1 = InlineKeyboardMarkup().add(bt1,bt2)
 
@@ -77,13 +58,11 @@ async def wblink(msg: types.Message):
 async def downloader(call: types.CallbackQuery):
    
     if call.data == "vidDown":
-         f = open("./data/video.mp4","rb")
-         await call.message.reply_video(video=f, caption=p.title())
+        f = open("./data/video.mp4","rb")
+        await call.message.reply_video(video=f, caption=p.title())
     elif call.data == "audDown":
         f = open("./data/song.mp4","rb")
-        await call.message.reply_audio(audio=f, title=p.title(),caption=p.title()) 
-        time.sleep(5)
-        p.fileh()
+        await call.message.reply_audio(audio=f, title=p.title(),caption=p.title())
     elif call.data == "more":
         res = requests.get(url2)
         dt = res.json()
@@ -95,7 +74,7 @@ async def downloader(call: types.CallbackQuery):
 async def chat(msg: types.Message):
     if p.aichat == True:
         res= p.AIbot(msg=msg.text)
-        await msg.answer(text=res)    
+        await msg.answer(text=res) 
     if msg.text == "🔢Whatsapp link to Instant Chat":
         await msg.answer("Type Your Whatsapp No \n as  9889xxxxx ")
     elif msg.text.isnumeric():
@@ -105,22 +84,17 @@ async def chat(msg: types.Message):
         res = requests.get(url2)
         dt = res.json()
         await msg.answer_photo(dt["url"], reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton( text="Want More Memes",callback_data="more")))
-    elif msg.text == "▶️Start AI Chat":
-        p.aichat = True
-        await msg.answer(reply_markup=kb2,text="AI Chat Start now you can chat\n and want to stop so press stop AI Chat")
-    elif msg.text == "⏹️Stop AI Chat":
-        p.aichat =False
-        await msg.answer(reply_markup=kb1, text="Bye Nice to meet you😄")
-    elif msg.text == "🌆Image Enchancement":
-        imgf = bot.get_file(msg.photo[-1].file_id)
-    # f = BytesIO()
-        imgf.download("img.jpg")
+    elif msg.text == "🔃Restart":
+        # await msg.delete
+        await msg.answer(reply_markup=kb1)
     elif  msg.text =="📽️Youtube Video Download":
-        if p.url == " ":
-            await msg.answer("Please Forward link of youtube video")
-        else:
-            await msg.answer_photo(p.thumnail(), caption=p.title() , reply_markup=lb1)
-    
+        
+        #if p.url == " ":
+        await msg.answer("Please Forward link of youtube video")
+        time.sleep(10)
+        p.fileh()
+ # else:
+         #   await msg.answer_photo(p.thumnail(), caption=p.title() , reply_markup=lb1)
     elif "https" in msg.text:
         p.url = msg.text
         p.Downloder()
@@ -128,5 +102,5 @@ async def chat(msg: types.Message):
       
         
         
-print("I am Live")        
+print("I am Live")       
 executor.start_polling(dp)
