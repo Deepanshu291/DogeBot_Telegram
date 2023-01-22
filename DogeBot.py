@@ -5,8 +5,6 @@ import pytube as pt
 import os
 import shutil
 import time
-import nest_asyncio
-nest_asyncio.apply()
 
 token = "5799520080:AAEoTbfH987-lrIBG0yO45S--wLnWDXjcdU"
 
