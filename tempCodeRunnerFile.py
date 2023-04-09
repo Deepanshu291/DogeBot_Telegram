@@ -1,0 +1,1 @@
+"C:\\Users\\Deepanshu\\Desktop\\New folder\\Telegram Bot\\DogeBot\\media"
